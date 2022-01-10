@@ -134,8 +134,6 @@ def main():
 
     solution = choose_solution()
 
-    solution = 'diazo'
-
     # welcome message
     print('Try to guess the five-letter word!')
     print(f'Letter in word: {in_word} // Letter in correct spot: {exact_match}')
