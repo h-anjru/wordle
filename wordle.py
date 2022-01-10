@@ -12,6 +12,7 @@ abs_path = os.path.dirname(os.path.abspath(__file__))
 wordfile_name = 'five-letter-words_scores.txt'
 wordfile_path = os.path.join(abs_path, wordfile_name)
 
+
 def choose_solution():
     """Choose a random five-letter word from the plaintext file.
 
@@ -60,7 +61,6 @@ def match_checker(solution, user_guess):
                 else:
                     user_matches[idx_in] = in_word
                     in_solution += letter_in
-                    print('in!')
                     break
 
     # get a string of letters not in solution
