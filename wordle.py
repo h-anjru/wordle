@@ -78,7 +78,7 @@ def input_checker(user_guess):
     return valid
 
 
-def play_game():
+def main():
     """Main gameplay"""
 
     matches_history = []
@@ -117,4 +117,5 @@ def play_game():
     return True
 
 
-play_game()
+if __name__ == "__main__":
+    main()
