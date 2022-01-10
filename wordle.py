@@ -121,8 +121,6 @@ def main():
 
     solution, difficulty = choose_solution()
 
-    solution = 'mosey'
-
     # welcome message
     print('Try to guess the five-letter word!')
     print(f'Scrabble (US) score: {difficulty}')
