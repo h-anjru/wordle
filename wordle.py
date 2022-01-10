@@ -64,26 +64,35 @@ def match_checker(user_guess, solution):
     user_matches = [no_match] * 5  # start fresh
     in_solution = ''
 
+    def remove_letter(guess_or_solution, letter, replace_with):
+        """Remove a letter to exclude from further matching"""
+        temp_list = list(guess_or_solution)  # str to list to make assignment possible
+        temp_list[idx_sol] = replace_with  # some non-letter symbol
+        guess_or_solution = ''.join(temp_list)
+
+        return guess_or_solution
+
+    # check first exclusively for exact matches...
     for idx_in, letter_in in enumerate(user_guess):
         for idx_sol, letter_sol in enumerate(solution):
             if letter_in == letter_sol:
-                # exact match
                 if idx_in == idx_sol:
                     user_matches[idx_in] = exact_match
                     in_solution += letter_in
-                # match in word
-                else:
-                    user_matches[idx_in] = in_word
-                    in_solution += letter_in
 
-                # replace letter in guess & solution with non-letter to exclude from further checking
-                temp_list = list(user_guess)
-                temp_list[idx_sol] = '*'
-                user_guess = ''.join(temp_list)
+                    # remove from both
+                    user_guess = remove_letter(user_guess, letter_in, '*')
+                    solution = remove_letter(solution, letter_sol, '&')
 
-                temp_list = list(solution)
-                temp_list[idx_sol] = '&'
-                solution = ''.join(temp_list)
+    # ...then for partial matches
+    for idx_in, letter_in in enumerate(user_guess):
+        for idx_sol, letter_sol in enumerate(solution):
+            if letter_in == letter_sol:
+                user_matches[idx_in] = in_word
+                in_solution += letter_in
+
+                # remove from only guess
+                user_guess = remove_letter(user_guess, letter_in, '*')
 
     # get a string of letters not in solution
     not_in_solution = user_guess
@@ -120,7 +129,7 @@ def main():
     """Main gameplay"""
 
     # tracking variables
-    matches_history = []  # list of strings of emojis for graphing guesses
+    matches_history = []  # list of strings
     matched_letters = ''
     missed_letters = ''
 
@@ -164,7 +173,6 @@ def main():
 
         if not solved:
             print(match_emoji_str)
-
 
     # print results on solve
     print('Congratulations!')
