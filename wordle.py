@@ -9,15 +9,14 @@ exact_match = '🟩'
 
 # the possible solutions!
 abs_path = os.path.dirname(os.path.abspath(__file__))
-wordfile_name = 'five-letter-words_scores.txt'
+wordfile_name = 'five-letter-words.txt'
 wordfile_path = os.path.join(abs_path, wordfile_name)
 
 
 def choose_solution():
     """Choose a random five-letter word from the plaintext file.
 
-    The possible words are of the format 'wwwww12' which is a five-letter word and its score in US Scrabble as either a
-    one- or two-digit number. The alphanumeric string is parsed and returned as the solution and the Scrabble score.
+    Word list: https://www-cs-faculty.stanford.edu/~knuth/sgb-words.txt
 
     Approach used: https://stackoverflow.com/a/35579149"""
 
@@ -33,10 +32,9 @@ def choose_solution():
             if r.uniform(0, line_num) < 1:
                 selected_line = line
 
-    word = selected_line[:5]
-    score = selected_line.replace(word,'').strip()
+    word = selected_line.strip()
 
-    return word, score
+    return word
 
 
 def input_checker(user_guess):
@@ -134,13 +132,13 @@ def main():
     matched_letters = ''
     missed_letters = ''
 
-    solution, difficulty = choose_solution()
+    solution = choose_solution()
 
     solution = 'diazo'
 
     # welcome message
     print('Try to guess the five-letter word!')
-    print(f'Scrabble (US) score: {difficulty}')
+    print(f'Letter in word: {in_word} // Letter in correct spot: {exact_match}')
     print('To see eliminated letters, type "letters"')
     print('To end the game, type "I give up"\n')
 
