@@ -50,10 +50,17 @@ def match_checker(solution, user_guess):
                 if idx_in == idx_sol:
                     user_matches[idx_in] = exact_match
                     in_solution += letter_in
+
+                    # replace letter in soluion with non-letter to exclude from further checking
+                    temp_list = list(solution)
+                    temp_list[idx_sol] = '*'
+                    solution = ''.join(temp_list)
+
                     break
                 else:
                     user_matches[idx_in] = in_word
                     in_solution += letter_in
+                    print('in!')
                     break
 
     # get a string of letters not in solution
@@ -114,10 +121,13 @@ def main():
 
     solution, difficulty = choose_solution()
 
+    solution = 'mosey'
+
+    # welcome message
     print('Try to guess the five-letter word!')
     print(f'Scrabble (US) score: {difficulty}')
     print('To see eliminated letters, type "letters"')
-    print('To end the game, type "I give up"')
+    print('To end the game, type "I give up"\n')
 
     # user input loop
     solved = False
