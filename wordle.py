@@ -18,7 +18,7 @@ def choose_solution():
 
     The possible words are of the format 'wwwww12' which is a five-letter word and its score in US Scrabble as either a
     one- or two-digit number. The alphanumeric string is parsed and returned as the solution and the Scrabble score.
-    
+
     Approach used: https://stackoverflow.com/a/35579149"""
 
     line_num = 0
@@ -91,8 +91,9 @@ def match_checker(user_guess, solution):
                 user_matches[idx_in] = in_word
                 in_solution += letter_in
 
-                # remove from only guess
+                # remove from both
                 user_guess = remove_letter(user_guess, letter_in, '*')
+                solution = remove_letter(solution, letter_sol, '&')
 
     # get a string of letters not in solution
     not_in_solution = user_guess
@@ -134,6 +135,8 @@ def main():
     missed_letters = ''
 
     solution, difficulty = choose_solution()
+
+    solution = 'diazo'
 
     # welcome message
     print('Try to guess the five-letter word!')
