@@ -39,39 +39,6 @@ def choose_solution():
     return word, score
 
 
-def match_checker(solution, user_guess):
-    """Check user input against solution"""
-
-    user_matches = [no_match] * 5  # start fresh
-    in_solution = ''
-
-    for idx_in, letter_in in enumerate(user_guess):
-        for idx_sol, letter_sol in enumerate(solution):
-            if letter_in == letter_sol:
-                if idx_in == idx_sol:
-                    user_matches[idx_in] = exact_match
-                    in_solution += letter_in
-
-                    # replace letter in soluion with non-letter to exclude from further checking
-                    temp_list = list(solution)
-                    temp_list[idx_sol] = '*'
-                    solution = ''.join(temp_list)
-
-                    break
-                else:
-                    user_matches[idx_in] = in_word
-                    in_solution += letter_in
-                    break
-
-    # get a string of letters not in solution
-    not_in_solution = user_guess
-
-    for letter in in_solution:
-        not_in_solution = not_in_solution.replace(letter, '')
-
-    return user_matches, in_solution, not_in_solution
-
-
 def input_checker(user_guess):
     """Check if the user's input is actually a word.
     
@@ -91,6 +58,42 @@ def input_checker(user_guess):
     return valid
 
 
+def match_checker(user_guess, solution):
+    """Check user input against solution"""
+
+    user_matches = [no_match] * 5  # start fresh
+    in_solution = ''
+
+    for idx_in, letter_in in enumerate(user_guess):
+        for idx_sol, letter_sol in enumerate(solution):
+            if letter_in == letter_sol:
+                # exact match
+                if idx_in == idx_sol:
+                    user_matches[idx_in] = exact_match
+                    in_solution += letter_in
+                # match in word
+                else:
+                    user_matches[idx_in] = in_word
+                    in_solution += letter_in
+
+                # replace letter in guess & solution with non-letter to exclude from further checking
+                temp_list = list(user_guess)
+                temp_list[idx_sol] = '*'
+                user_guess = ''.join(temp_list)
+
+                temp_list = list(solution)
+                temp_list[idx_sol] = '&'
+                solution = ''.join(temp_list)
+
+    # get a string of letters not in solution
+    not_in_solution = user_guess
+
+    for letter in in_solution:
+        not_in_solution = not_in_solution.replace(letter, '')
+
+    return user_matches, in_solution, not_in_solution
+
+
 def remaining_letters(right_guesses, wrong_guesses):
     """Return a list of letters that are still available."""
 
@@ -102,9 +105,11 @@ def remaining_letters(right_guesses, wrong_guesses):
         if letter in right_guesses:
             char_to_append = f'[{letter}]'
         elif letter in wrong_guesses:
-            char_to_append = '·'
-        else:
+            char_to_append = ' · '
+        elif letter == '\n':
             char_to_append = letter
+        else:
+            char_to_append = f' {letter} '
 
         remaining_alphabet.append(char_to_append)
 
@@ -139,12 +144,12 @@ def main():
                 return True
             if user_input == 'letters':
                 remaining = remaining_letters(matched_letters, missed_letters)
-                print(' '.join(remaining))
+                print(''.join(remaining))
                 continue  # return to beginning of loop
 
             input_valid = input_checker(user_input)
 
-        match_emojis, matches, misses = match_checker(solution, user_input)
+        match_emojis, matches, misses = match_checker(user_input, solution)
 
         # make the emoji string to graph guesses
         match_emoji_str = ''.join(match_emojis)
