@@ -1,4 +1,5 @@
 import mmap
+import os
 import random as r
 
 # emoji match indicators
@@ -7,8 +8,9 @@ in_word = '🟨'
 exact_match = '🟩'
 
 # the possible solutions!
-wordfile = 'five-letter-words_scores.txt'
-
+abs_path = os.path.dirname(os.path.abspath(__file__))
+wordfile_name = 'five-letter-words_scores.txt'
+wordfile_path = os.path.join(abs_path, wordfile_name)
 
 def choose_solution():
     """Choose a random five-letter word from the plaintext file.
@@ -21,7 +23,7 @@ def choose_solution():
     line_num = 0
     selected_line = ''
 
-    with open(wordfile) as f:
+    with open(wordfile_path) as f:
         while True:
             line = f.readline()
             if not line:
@@ -72,7 +74,7 @@ def input_checker(user_guess):
         print('Your guess is not of the correct length (5).')
         valid = False
     else:
-        with open(wordfile) as f, mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ) as s:
+        with open(wordfile_path) as f, mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ) as s:
             if s.find(str.encode(user_guess)) != -1:
                 valid = True
             else:
