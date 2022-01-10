@@ -40,28 +40,27 @@ def match_checker(solution, user_guess):
     """Check user input against solution"""
 
     user_matches = [no_match] * 5  # start fresh
+    in_solution = ''
 
     for idx_in, letter_in in enumerate(user_guess):
         for idx_sol, letter_sol in enumerate(solution):
             if letter_in == letter_sol:
                 if idx_in == idx_sol:
                     user_matches[idx_in] = exact_match
+                    in_solution += letter_in
                     break
                 else:
                     user_matches[idx_in] = in_word
+                    in_solution += letter_in
+                    break
 
-    return(user_matches)
+    # get a string of letters not in solution
+    not_in_solution = user_guess
 
+    for letter in in_solution:
+        not_in_solution = not_in_solution.replace(letter, '')
 
-def solve_checker(user_matches):
-    """Check if solved!"""
-
-    solved = all(match == exact_match for match in user_matches)
-
-    if solved:
-        print('Congratulations!')
-
-    return solved
+    return user_matches, in_solution, not_in_solution
 
 
 def input_checker(user_guess):
@@ -69,48 +68,91 @@ def input_checker(user_guess):
     
     Method for checking if input is in text file: https://stackoverflow.com/a/4944929"""
 
-    with open(wordfile) as f, mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ) as s:
-        if s.find(str.encode(user_guess)) != -1:
-            valid = True
-        else:
-            print('That is not recognized as a word.')
-            valid = False
+    if len(user_guess) != 5:
+        print('Your guess is not of the correct length (5).')
+        valid = False
+    else:
+        with open(wordfile) as f, mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ) as s:
+            if s.find(str.encode(user_guess)) != -1:
+                valid = True
+            else:
+                print('That is not recognized as a word.')
+                valid = False
 
     return valid
+
+
+def remaining_letters(right_guesses, wrong_guesses):
+    """Return a list of letters that are still available."""
+
+    alphabet = 'abcdefghi\njklmnopqr\nstuvwxyz'
+
+    remaining_alphabet = []  # list of strings to be represented as emojis
+
+    for letter in alphabet:
+        if letter in right_guesses:
+            char_to_append = f'[{letter}]'
+        elif letter in wrong_guesses:
+            char_to_append = '·'
+        else:
+            char_to_append = letter
+
+        remaining_alphabet.append(char_to_append)
+
+    return remaining_alphabet
 
 
 def main():
     """Main gameplay"""
 
-    matches_history = []  # list of strings for keeping track of matches
-    guess_history = []  # TODO: currently unused; keep track of letters and/or words guessed
+    # tracking variables
+    matches_history = []  # list of strings of emojis for graphing guesses
+    matched_letters = ''
+    missed_letters = ''
 
     solution, difficulty = choose_solution()
 
+    print('Try to guess the five-letter word!')
     print(f'Scrabble (US) score: {difficulty}')
+    print('To see eliminated letters, type "letters"')
     print('To end the game, type "I give up"')
 
+    # user input loop
     solved = False
 
     while not solved:
         input_valid = False
         while input_valid is False:
-            user_input = input('Your guess: ').lower()
+            user_input = input('Your guess: ').lower().strip()
             if user_input == 'i give up':
                 print(f'The word was "{solution}"!')
                 return True
+            if user_input == 'letters':
+                remaining = remaining_letters(matched_letters, missed_letters)
+                print(' '.join(remaining))
+                continue  # return to beginning of loop
 
             input_valid = input_checker(user_input)
 
-        matches = match_checker(solution, user_input)
+        match_emojis, matches, misses = match_checker(solution, user_input)
 
-        matches_str = ''.join(matches)
-        matches_history.append(matches_str)
-        print(matches_str)
+        # make the emoji string to graph guesses
+        match_emoji_str = ''.join(match_emojis)
 
-        solved = solve_checker(matches)
+        # check if solved
+        solved = user_input == solution
 
-    # print results
+        # add results to tracking variables
+        matches_history.append(match_emoji_str)
+        matched_letters += matches
+        missed_letters += misses
+
+        if not solved:
+            print(match_emoji_str)
+
+
+    # print results on solve
+    print('Congratulations!')
     for line in matches_history:
         print(line)
 
