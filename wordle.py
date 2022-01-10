@@ -64,7 +64,6 @@ def solve_checker(user_matches):
     return solved
 
 
-# TODO: def input_checker() to check length and if it's a word
 def input_checker(user_guess):
     """Check if the user's input is actually a word.
     
@@ -83,8 +82,8 @@ def input_checker(user_guess):
 def main():
     """Main gameplay"""
 
-    matches_history = []
-    guess_history = []
+    matches_history = []  # list of strings for keeping track of matches
+    guess_history = []  # TODO: currently unused; keep track of letters and/or words guessed
 
     solution, difficulty = choose_solution()
 
@@ -92,7 +91,6 @@ def main():
     print('To end the game, type "I give up"')
 
     solved = False
-    # TODO: add a counter for maximum number of guesses?
 
     while not solved:
         input_valid = False
