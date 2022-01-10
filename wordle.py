@@ -66,7 +66,9 @@ def solve_checker(user_matches):
 
 # TODO: def input_checker() to check length and if it's a word
 def input_checker(user_guess):
-    """Check if the user's input is actually a word."""
+    """Check if the user's input is actually a word.
+    
+    Method for checking if input is in text file: https://stackoverflow.com/a/4944929"""
 
     with open(wordfile) as f, mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ) as s:
         if s.find(str.encode(user_guess)) != -1:
