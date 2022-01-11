@@ -8,31 +8,27 @@ This game has also been adapted to my Discord bot. You can find it here: https:/
 ## Example gameplay
 ```
 $ python3 wordle.py
-Try to guess the five-letter word!
-Letter in word: 🟨 // Letter in correct spot: 🟩
-To see eliminated letters, type "letters"
-To end the game, type "I give up"
+╔═══════════════════════════════════════╗
+║  WORDLE: Guess the five-letter word!  ║
+╚═══════════════════════════════════════╝
+ If your letter is somewhere in word: +
+ If your letter is in the right spot: $
 
-Your guess: tries
-❌❌❌🟨🟩
-Your guess: meals
-❌🟨🟩❌🟩
-Your guess: apple
-🟨❌❌🟩🟩
+ To see the letterboard, type "letters"
+ To end, either win or type "I give up"
+
+
+Your guess: tries 
+- - - + +
+Your guess: soled
+$ + + + -
 Your guess: letters
-[a] b  c  d [e] f  g  h  ·
- j  k [l] ·  ·  ·  ·  q  ·
- ·  ·  u  v  w  x  y  z
-Your guess: ladle
-❌🟩❌🟩🟩
-Your guess: cable
-❌🟩🟩🟩🟩
-Your guess: fable
+ a  b  c  - [e] f  g  h  - 
+ j  k [l] m  n [o] p  q  -
+[s] -  u  v  w  x  y  z
+Your guess: slope
 Congratulations!
-❌❌❌🟨❌ - tries
-🟨🟨❌❌❌ - lemon
-🟨❌❌🟩🟩 - apple
-❌🟩❌🟩🟩 - ladle
-❌🟩🟩🟩🟩 - cable
-🟩🟩🟩🟩🟩 - fable
+- - - + + · tries
+$ + + + - · soled
+$ $ $ $ $ · slope
 ```

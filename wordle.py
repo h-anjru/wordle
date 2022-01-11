@@ -2,10 +2,10 @@ import mmap
 import os
 import random as r
 
-# emoji match indicators
-no_match = '❌'
-in_word = '🟨'
-exact_match = '🟩'
+# symbol match indicators
+no_match = '-'
+in_word = '+'
+exact_match = '$'
 
 # the possible solutions!
 abs_path = os.path.dirname(os.path.abspath(__file__))
@@ -107,7 +107,7 @@ def remaining_letters(right_guesses, wrong_guesses):
 
     alphabet = 'abcdefghi\njklmnopqr\nstuvwxyz'
 
-    remaining_alphabet = []  # list of strings to be represented as emojis
+    remaining_alphabet = []
 
     for letter in alphabet:
         if letter in right_guesses:
@@ -135,10 +135,17 @@ def main():
     solution = choose_solution()
 
     # welcome message
-    print('Try to guess the five-letter word!')
-    print(f'Letter in word: {in_word} // Letter in correct spot: {exact_match}')
-    print('To see eliminated letters, type "letters"')
-    print('To end the game, type "I give up"\n')
+    print('\n'.join([
+        '╔═══════════════════════════════════════╗',
+        '║  WORDLE: Guess the five-letter word!  ║',
+        '╚═══════════════════════════════════════╝',
+        f' If your letter is somewhere in word: {in_word}',
+        f' If your letter is in the right spot: {exact_match}',
+        ' ',
+        ' To see the letterboard, type "letters"',
+        ' To end, either win or type "I give up"',
+        ' ',
+    ]))
 
     # user input loop
     solved = False
@@ -157,21 +164,21 @@ def main():
 
             input_valid = input_checker(user_input)
 
-        match_emojis, matches, misses = match_checker(user_input, solution)
+        match_symbols, matches, misses = match_checker(user_input, solution)
 
-        # make the emoji string to graph guesses
-        match_emoji_str = ''.join(match_emojis)
+        # make the symbol string to graph guesses
+        match_symbol_str = ' '.join(match_symbols)
 
         # check if solved
         solved = user_input == solution
 
         # add results to tracking variables
-        matches_history.append(f'{match_emoji_str} - {user_input}')
+        matches_history.append(f'{match_symbol_str} · {user_input}')
         matched_letters += matches
         missed_letters += misses
 
         if not solved:
-            print(match_emoji_str)
+            print(match_symbol_str)
 
     # print results on solve
     print('Congratulations!')
