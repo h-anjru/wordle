@@ -166,7 +166,7 @@ def main():
         solved = user_input == solution
 
         # add results to tracking variables
-        matches_history.append(match_emoji_str)
+        matches_history.append(f'{match_emoji_str} - {user_input}')
         matched_letters += matches
         missed_letters += misses
 
